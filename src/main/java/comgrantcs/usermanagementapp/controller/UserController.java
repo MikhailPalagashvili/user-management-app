@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(path = "/api/users", produces = "application/json")
 public class UserController {
     private final UserRepository userRepository;
 
@@ -25,21 +25,21 @@ public class UserController {
 
     // get user by id
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable(value = "id") Long id) {
+    public User getUserById(@PathVariable(value = "id") final Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     // create user
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody final User user) {
         return this.userRepository.save(user);
     }
 
     // update user
     @PutMapping("/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable(value = "id") Long id) {
-        User existing = this.userRepository.findById(id)
+    public User updateUser(@RequestBody final User user, @PathVariable(value = "id") final Long id) {
+        final User existing = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         existing.setFirstName(user.getFirstName());
         existing.setLastName(user.getLastName());
@@ -49,8 +49,8 @@ public class UserController {
 
     // delete user
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable(value = "id") Long id) {
-        User existing = this.userRepository.findById(id)
+    public ResponseEntity<User> deleteUser(@PathVariable(value = "id") final Long id) {
+        final User existing = this.userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
         this.userRepository.delete(existing);
         return ResponseEntity.ok().build();
